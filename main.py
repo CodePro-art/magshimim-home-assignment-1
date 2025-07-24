@@ -93,55 +93,66 @@ def search_lyrics(word: str):
 
 def cli_menu():
     while True:
-        print("\nבחר פעולה:")
-        print("1. רשימת אלבומים")
-        print("2. רשימת שירים באלבום")
-        print("3. קבלת משך זמן של שיר")
-        print("4. קבלת מילים של שיר")
-        print("5. באיזה אלבום נמצא השיר?")
-        print("6. חיפוש שיר לפי שם")
-        print("7. חיפוש שיר לפי מילים בשיר")
-        print("8. יציאה")
-        choice = input("הכנס מספר בחירה: ")
+        print("\nChoose an option:")
+        print("1. List all albums")
+        print("2. List songs in an album")
+        print("3. Get duration of a song")
+        print("4. Get lyrics of a song")
+        print("5. Find album of a song")
+        print("6. Search songs by title")
+        print("7. Search songs by lyrics")
+        print("8. Exit")
+
+        choice = input("Enter your choice (1–8): ")
 
         if choice == "1":
-            print("\nרשימת אלבומים:")
+            print("\nAlbums:")
             for album in df['album'].unique():
                 print(f"- {album}")
         elif choice == "2":
-            name = input("הכנס שם אלבום: ")
+            name = input("Enter album name: ")
             songs = df[df['album'].str.lower() == name.lower()]
             if songs.empty:
-                print("האלבום לא נמצא.")
+                print("Album not found.")
             else:
-                print(f"שירים באלבום {name}:")
+                print(f"Songs in '{name}':")
                 for title in songs['title']:
                     print(f"- {title}")
         elif choice == "3":
-            name = input("הכנס שם שיר: ")
+            name = input("Enter song name: ")
             result = df[df['title_lower'] == name.lower()]
-            print(result['duration'].values[0] if not result.empty else "שיר לא נמצא.")
+            print(result['duration'].values[0] if not result.empty else "Song not found.")
         elif choice == "4":
-            name = input("הכנס שם שיר: ")
+            name = input("Enter song name: ")
             result = df[df['title_lower'] == name.lower()]
-            print(result['lyrics'].values[0] if not result.empty else "שיר לא נמצא.")
+            print(result['lyrics'].values[0] if not result.empty else "Song not found.")
         elif choice == "5":
-            name = input("הכנס שם שיר: ")
+            name = input("Enter song name: ")
             result = df[df['title_lower'] == name.lower()]
-            print(result['album'].values[0] if not result.empty else "שיר לא נמצא.")
+            print(result['album'].values[0] if not result.empty else "Song not found.")
         elif choice == "6":
-            word = input("הכנס מילה לחיפוש בשם: ")
+            word = input("Enter word to search in song titles: ")
             matches = df[df['title_lower'].str.contains(word.lower())]['title'].tolist()
-            print("שירים שנמצאו:", *matches, sep="\n- ")
+            if matches:
+                print("Songs found:")
+                for title in matches:
+                    print(f"- {title}")
+            else:
+                print("No matching songs found.")
         elif choice == "7":
-            word = input("הכנס מילה לחיפוש במילים: ")
+            word = input("Enter word to search in lyrics: ")
             matches = df[df['lyrics_lower'].str.contains(word.lower())]['title'].tolist()
-            print("שירים שנמצאו:", *matches, sep="\n- ")
+            if matches:
+                print("Songs found:")
+                for title in matches:
+                    print(f"- {title}")
+            else:
+                print("No matching songs found.")
         elif choice == "8":
-            print("להתראות!")
+            print("Goodbye!")
             break
         else:
-            print("בחירה לא חוקית, נסה שוב.")
+            print("Invalid choice. Please try again.")
 
 # ===============
 # Run Option
